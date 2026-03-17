@@ -1,0 +1,7 @@
+prompt_id,model,response
+scenario1_json_pipeline,ChatGPT,
+scenario1_json_pipeline,Claude,
+scenario2_role_tracking,ChatGPT,
+scenario2_role_tracking,Claude,
+scenario3_clarification,ChatGPT,
+scenario3_clarification,Claude,
