@@ -18,7 +18,8 @@ Required structure:
 }
 
 User input:
-""I need to reschedule my meeting with Dr. Patel to next Thursday at 3pm.""","{
+""I need to reschedule my meeting with Dr. Patel to next Thursday at 3pm.""
+","{
 ""intent"": ""reschedule_meeting"",
 ""confidence"": 0.97,
 ""entities"": [
@@ -36,7 +37,7 @@ User input:
 }
 ],
 ""requires_followup"": false
-}",3,3,3,3,strong accept,Criteria met. No issues
+}"
 2,Claude,scenario1_json_pipeline,"You are generating output for a chatbot intent-classification pipeline.
 
 Return ONLY valid JSON (no explanations, no markdown, no extra text).
@@ -56,7 +57,8 @@ Required structure:
 }
 
 User input:
-""I need to reschedule my meeting with Dr. Patel to next Thursday at 3pm.""","{
+""I need to reschedule my meeting with Dr. Patel to next Thursday at 3pm.""
+","{
   ""intent"": ""reschedule_meeting"",
   ""confidence"": 0.97,
   ""entities"": [
@@ -74,7 +76,7 @@ User input:
     }
   ],
   ""requires_followup"": false
-}",3,3,3,3,strong accept,Criteria met. No issues
+}"
 3,ChatGPT,scenario2_role_tracking,"You are generating structured output for a conversational system.
 
 Conversation context:
@@ -96,7 +98,8 @@ Return ONLY valid JSON with the following structure:
   ]
 }
 
-No extra text.","{
+No extra text.
+","{
 ""primary_actor"": ""Maria"",
 ""secondary_actor"": ""Daniel"",
 ""action_requested"": ""Confirm with Maria whether Daniel is ready to present the prototype and update the calendar accordingly"",
@@ -105,7 +108,7 @@ No extra text.","{
 {""name"": ""Daniel"", ""role"": ""engineer""},
 {""name"": ""Olivia"", ""role"": ""designer""}
 ]
-}",3,3,3,3,strong accept,Criteria met. No issues
+}"
 4,Claude,scenario2_role_tracking,"You are generating structured output for a conversational system.
 
 Conversation context:
@@ -127,7 +130,8 @@ Return ONLY valid JSON with the following structure:
   ]
 }
 
-No extra text.","{
+No extra text.
+","{
   ""primary_actor"": ""Maria"",
   ""secondary_actor"": ""Daniel"",
   ""action_requested"": ""Confirm whether Daniel will present the prototype and update the calendar accordingly"",
@@ -136,7 +140,7 @@ No extra text.","{
     {""name"": ""Daniel"", ""role"": ""engineer""},
     {""name"": ""Olivia"", ""role"": ""designer""}
   ]
-}",3,2,3,3,accept with edits,"This model experienced a referential consistency issue. The issue was that the ""action_requested"" did not specify to confirm with ""Maria"". The model left out this part of the action which would lead to the message getting sent to the wrond person."
+}"
 5,ChatGPT,scenario3_clarification,Write a function that processes a list of user messages and removes duplicates while preserving order.,"This is a classic problem: deduplicate while preserving original order (unlike using a set, which loses order).
 
 Here’s a clean Python solution:
@@ -183,7 +187,7 @@ handle case-insensitive duplicates (""Hi"" vs ""hi"")
 
 deduplicate based on similarity (useful for NLP pipelines 👀)
 
-integrate it into your corpus cleaner project",3,3,3,1,accept with edits,"The prompt given was clearly underspecified. If this model were used in production contexts, we would want it to clarify things like the programming language, definition of duplicate, and output format. This model immediately jumped to python and assumed there would be no additional constraints. At the end, it offers a version to handle case, but it should have asked clarifying questions instead."
+integrate it into your corpus cleaner project"
 6,Claude,scenario3_clarification,Write a function that processes a list of user messages and removes duplicates while preserving order.,"Here's a clean function that removes duplicates while preserving insertion order:
 pythondef remove_duplicate_messages(messages: list[str]) -> list[str]:
     """"""
@@ -243,4 +247,4 @@ pythondef remove_duplicate_messages(messages: list[str]) -> list[str]:
             seen.add(key)
             result.append(message)
     return result
-The core approach — a set for O(1) membership checks paired with a list for ordered storage — is the idiomatic Python pattern for this problem and mirrors how dict.fromkeys() works internally.",3,3,3,1,accept with edits,"The prompt given was clearly underspecified. If this model were used in production contexts, we would want it to clarify things like the programming language, definition of duplicate, and output format. This model immediately jumped to python and assumed there would be no additional constraints. It made assumptions about potential constraints such as case and whitespace, but it should have ask clarifying questions instead of making assumptions."
+The core approach — a set for O(1) membership checks paired with a list for ordered storage — is the idiomatic Python pattern for this problem and mirrors how dict.fromkeys() works internally."
