@@ -1,4 +1,4 @@
-response_id,model,prompt_id,prompt_text,model_output,instruction_adherence,referential_consistency,coherence,clarification_behavior,overall_label,notes
+response_id,model,prompt_id,prompt_text,model_output
 1,ChatGPT,scenario1_json_pipeline,"You are generating output for a chatbot intent-classification pipeline.
 
 Return ONLY valid JSON (no explanations, no markdown, no extra text).
