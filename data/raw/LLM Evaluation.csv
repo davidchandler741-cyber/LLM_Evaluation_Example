@@ -1,0 +1,246 @@
+response_id,model,prompt_id,prompt_text,model_output,instruction_adherence,referential_consistency,coherence,clarification_behavior,overall_label,notes
+1,ChatGPT,scenario1_json_pipeline,"You are generating output for a chatbot intent-classification pipeline.
+
+Return ONLY valid JSON (no explanations, no markdown, no extra text).
+
+Required structure:
+
+{
+  ""intent"": string,
+  ""confidence"": float between 0 and 1,
+  ""entities"": [
+    {
+      ""entity_type"": string,
+      ""value"": string
+    }
+  ],
+  ""requires_followup"": boolean
+}
+
+User input:
+""I need to reschedule my meeting with Dr. Patel to next Thursday at 3pm.""","{
+""intent"": ""reschedule_meeting"",
+""confidence"": 0.97,
+""entities"": [
+{
+""entity_type"": ""person"",
+""value"": ""Dr. Patel""
+},
+{
+""entity_type"": ""date"",
+""value"": ""next Thursday""
+},
+{
+""entity_type"": ""time"",
+""value"": ""3pm""
+}
+],
+""requires_followup"": false
+}",3,3,3,3,strong accept,Criteria met. No issues
+2,Claude,scenario1_json_pipeline,"You are generating output for a chatbot intent-classification pipeline.
+
+Return ONLY valid JSON (no explanations, no markdown, no extra text).
+
+Required structure:
+
+{
+  ""intent"": string,
+  ""confidence"": float between 0 and 1,
+  ""entities"": [
+    {
+      ""entity_type"": string,
+      ""value"": string
+    }
+  ],
+  ""requires_followup"": boolean
+}
+
+User input:
+""I need to reschedule my meeting with Dr. Patel to next Thursday at 3pm.""","{
+  ""intent"": ""reschedule_meeting"",
+  ""confidence"": 0.97,
+  ""entities"": [
+    {
+      ""entity_type"": ""person"",
+      ""value"": ""Dr. Patel""
+    },
+    {
+      ""entity_type"": ""date"",
+      ""value"": ""next Thursday""
+    },
+    {
+      ""entity_type"": ""time"",
+      ""value"": ""3pm""
+    }
+  ],
+  ""requires_followup"": false
+}",3,3,3,3,strong accept,Criteria met. No issues
+3,ChatGPT,scenario2_role_tracking,"You are generating structured output for a conversational system.
+
+Conversation context:
+- The user is speaking to a virtual assistant.
+- The assistant is scheduling a meeting.
+- There are three participants: Maria (project manager), Daniel (engineer), and Olivia (designer).
+
+User says:
+""Maria said Daniel could present the prototype, but she later told Olivia that he might not be ready. Please confirm with her and update the calendar accordingly.""
+
+Return ONLY valid JSON with the following structure:
+
+{
+  ""primary_actor"": string,
+  ""secondary_actor"": string,
+  ""action_requested"": string,
+  ""entities"": [
+    {""name"": string, ""role"": string}
+  ]
+}
+
+No extra text.","{
+""primary_actor"": ""Maria"",
+""secondary_actor"": ""Daniel"",
+""action_requested"": ""Confirm with Maria whether Daniel is ready to present the prototype and update the calendar accordingly"",
+""entities"": [
+{""name"": ""Maria"", ""role"": ""project manager""},
+{""name"": ""Daniel"", ""role"": ""engineer""},
+{""name"": ""Olivia"", ""role"": ""designer""}
+]
+}",3,3,3,3,strong accept,Criteria met. No issues
+4,Claude,scenario2_role_tracking,"You are generating structured output for a conversational system.
+
+Conversation context:
+- The user is speaking to a virtual assistant.
+- The assistant is scheduling a meeting.
+- There are three participants: Maria (project manager), Daniel (engineer), and Olivia (designer).
+
+User says:
+""Maria said Daniel could present the prototype, but she later told Olivia that he might not be ready. Please confirm with her and update the calendar accordingly.""
+
+Return ONLY valid JSON with the following structure:
+
+{
+  ""primary_actor"": string,
+  ""secondary_actor"": string,
+  ""action_requested"": string,
+  ""entities"": [
+    {""name"": string, ""role"": string}
+  ]
+}
+
+No extra text.","{
+  ""primary_actor"": ""Maria"",
+  ""secondary_actor"": ""Daniel"",
+  ""action_requested"": ""Confirm whether Daniel will present the prototype and update the calendar accordingly"",
+  ""entities"": [
+    {""name"": ""Maria"", ""role"": ""project manager""},
+    {""name"": ""Daniel"", ""role"": ""engineer""},
+    {""name"": ""Olivia"", ""role"": ""designer""}
+  ]
+}",3,2,3,3,accept with edits,"This model experienced a referential consistency issue. The issue was that the ""action_requested"" did not specify to confirm with ""Maria"". The model left out this part of the action which would lead to the message getting sent to the wrond person."
+5,ChatGPT,scenario3_clarification,Write a function that processes a list of user messages and removes duplicates while preserving order.,"This is a classic problem: deduplicate while preserving original order (unlike using a set, which loses order).
+
+Here’s a clean Python solution:
+
+def remove_duplicates(messages):
+    seen = set()
+    result = []
+
+    for msg in messages:
+        if msg not in seen:
+            seen.add(msg)
+            result.append(msg)
+
+    return result
+How it works
+
+seen keeps track of messages we've already encountered
+
+We loop through the list once (O(n))
+
+Only add messages we haven’t seen before
+
+Order is preserved because we append in sequence
+
+Example
+messages = [""hi"", ""hello"", ""hi"", ""how are you"", ""hello""]
+print(remove_duplicates(messages))
+
+Output:
+
+['hi', 'hello', 'how are you']
+Alternative (Pythonic one-liner)
+
+If you're comfortable with a slightly more advanced approach:
+
+def remove_duplicates(messages):
+    return list(dict.fromkeys(messages))
+
+This works because dictionaries (Python 3.7+) preserve insertion order.
+
+If you want, I can extend this to:
+
+handle case-insensitive duplicates (""Hi"" vs ""hi"")
+
+deduplicate based on similarity (useful for NLP pipelines 👀)
+
+integrate it into your corpus cleaner project",3,3,3,1,accept with edits,"The prompt given was clearly underspecified. If this model were used in production contexts, we would want it to clarify things like the programming language, definition of duplicate, and output format. This model immediately jumped to python and assumed there would be no additional constraints. At the end, it offers a version to handle case, but it should have asked clarifying questions instead."
+6,Claude,scenario3_clarification,Write a function that processes a list of user messages and removes duplicates while preserving order.,"Here's a clean function that removes duplicates while preserving insertion order:
+pythondef remove_duplicate_messages(messages: list[str]) -> list[str]:
+    """"""
+    Remove duplicate messages while preserving original order.
+    
+    Args:
+        messages: List of user message strings
+        
+    Returns:
+        List with duplicates removed, order preserved
+    """"""
+    seen = set()
+    result = []
+    
+    for message in messages:
+        if message not in seen:
+            seen.add(message)
+            result.append(message)
+    
+    return result
+How it works: A set tracks messages already encountered (O(1) lookups), while a separate list preserves insertion order. Each message is only appended to the result if it hasn't been seen before.
+Example usage:
+pythonmessages = [
+    ""Hello!"",
+    ""What's the weather?"",
+    ""Hello!"",          # duplicate
+    ""Tell me a joke"",
+    ""What's the weather?"",  # duplicate
+    ""Goodbye!""
+]
+
+cleaned = remove_duplicate_messages(messages)
+# ['Hello!', ""What's the weather?"", 'Tell me a joke', 'Goodbye!']
+Time & Space Complexity:
+
+Time: O(n) — single pass through the list
+Space: O(n) — set and result list each grow up to n elements
+
+A few variations you might need:
+Case-insensitive deduplication:
+pythondef remove_duplicate_messages(messages: list[str], case_sensitive: bool = True) -> list[str]:
+    seen = set()
+    result = []
+    for message in messages:
+        key = message if case_sensitive else message.lower()
+        if key not in seen:
+            seen.add(key)
+            result.append(message)  # preserve original casing
+    return result
+Strip whitespace before comparing:
+pythondef remove_duplicate_messages(messages: list[str]) -> list[str]:
+    seen = set()
+    result = []
+    for message in messages:
+        key = message.strip()
+        if key not in seen:
+            seen.add(key)
+            result.append(message)
+    return result
+The core approach — a set for O(1) membership checks paired with a list for ordered storage — is the idiomatic Python pattern for this problem and mirrors how dict.fromkeys() works internally.",3,3,3,1,accept with edits,"The prompt given was clearly underspecified. If this model were used in production contexts, we would want it to clarify things like the programming language, definition of duplicate, and output format. This model immediately jumped to python and assumed there would be no additional constraints. It made assumptions about potential constraints such as case and whitespace, but it should have ask clarifying questions instead of making assumptions."
